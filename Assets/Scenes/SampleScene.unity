@@ -264,6 +264,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1234295750584746008, guid: ca7022f3f3b000e46951789910c76046, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2207158355012645218, guid: ca7022f3f3b000e46951789910c76046, type: 3}
       propertyPath: m_Actions
       value: 
