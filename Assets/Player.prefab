@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6765345218639185814}
   - component: {fileID: 279409003381074500}
-  - component: {fileID: 6780796553726462504}
   - component: {fileID: 1234295750584746008}
   - component: {fileID: 2207158355012645218}
+  - component: {fileID: 4454589954857246258}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -94,19 +94,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &6780796553726462504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6373164494020639296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 571252fea3e43d041878254e187b5835, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  Speed: 10
 --- !u!50 &1234295750584746008
 Rigidbody2D:
   serializedVersion: 5
@@ -164,3 +151,16 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &4454589954857246258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6373164494020639296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 571252fea3e43d041878254e187b5835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  Speed: 10
