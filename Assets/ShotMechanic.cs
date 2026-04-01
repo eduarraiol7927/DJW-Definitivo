@@ -1,26 +1,35 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ShotMechanic : MonoBehaviour
 {
 
     public GameObject Bullet;
+    private bool isShot = false;
+    protected float speed = 15f;
+    private Vector2 mousePos;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+    
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool isHidden(){
-            Bullet.transform.localScale = new Vector2(0,0);
+        mousePos = Mouse.current.position.ReadValue();
+        
+        if (isShot= false){
+            Bullet.transform.localScale = new Vector2(0f,0f);
         }
-        bool isShowing(){
-            Bullet.transform.localScale = new Vector2(1, 1);
+        else{
+            Bullet.transform.localScale = new Vector2(0.5f, 0.5f);
+            Vector2.MoveTowards(transform.localPosition, mousePos, speed);
+            
         }
 
-        #Alternar os bools quando chegar em casa
+        
+        
     }
 }
