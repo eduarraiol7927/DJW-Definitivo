@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
         if (input != Vector2.zero)
         //Caso o input seja diferente de 0,
         {
-            Debug.Log("Jogador está se movendo.");
             rb.linearVelocity = input * Speed;
         //Atribuimos ao rb.linearVelocity (que é a velocidade do RigidBody) o valor da tecla pressionada multiplicada pela
         // velocidade resultando na movimentação do personagem.
@@ -44,7 +43,6 @@ public class PlayerController : MonoBehaviour
         else
         //Caso o input seja 0, então, a tecla foi solta,
         {
-            Debug.Log("Jogador parou de se mover.");
             rb.linearVelocity = new Vector2(Mathf.MoveTowards(rb.linearVelocity.x, 0f, 25f * Time.fixedDeltaTime), 
             Mathf.MoveTowards(rb.linearVelocity.y, 0f, 25f * Time.fixedDeltaTime));
             //Atribuimos ao rb.linearVelocity um novo valor/vector2, no entanto, com o Mathf.MoveTowards, que será responsável pela
