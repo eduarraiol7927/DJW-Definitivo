@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "repositorio.slnx"
+    "dotnet.defaultSolution": "DJW-Definitivo.slnx"
 }

@@ -9,16 +9,23 @@ public class PlayerController : MonoBehaviour
     //Variável que armazena o rigidbody
     private Vector2 input;
     //Pra lembrar o input do OnMove e usar no FixedUpdate
+    private ShotMechanic shotMechanic;
+    //variavel pra referenciar o script shotmechanic e usar ele pro isShot
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     //Atribuindo rigidbody pro rb
+        shotMechanic = GetComponentInChildren<ShotMechanic>();
+    //atribuindo o script shotmechanic pra variavel, pegando ele do objeto bullet.
+
     }
     // Update is called once per frame
     void Update()
     {
+        
     }
 
     void OnMove(InputValue inputValue)
@@ -28,6 +35,19 @@ public class PlayerController : MonoBehaviour
         input = inputValue.Get<Vector2>();
         //O input recebe a varíavel inputValue (ex: W, A, S, D), e usamos o .Get<Vector2>() pra ser compreendido como um valor de x
         // e y, ou seja num caso de ter apertado W, x seria 0 e y seria 1.
+    }
+
+    void OnShot(InputValue inputValue)
+    {
+        if (inputValue.isPressed)
+        //se a tecla de tiro for pressionada,
+        {
+            shotMechanic.isShot = true;
+            //usamos o isShot do shotmechanic porque ele é responsável por controlar as mecanicas do tiro, que estao no script do shotmechanic.
+            shotMechanic.targetPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            //usamos o targetPos do shotmechanic pra definir a posição do mouse como fixa e nova toda vez que clicarmos.
+
+        }
     }
 
     void FixedUpdate()
