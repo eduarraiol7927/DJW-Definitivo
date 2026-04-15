@@ -14,7 +14,7 @@ public class ShotMechanic : MonoBehaviour
     public bool isShot = false;
     //declaramos uma variavel bool pra decidir se a bala foi atirada, começando como falsa para a bala 
     // nao aparecer e também nao começar atirando
-    private float speed = 13f;
+    private float speed = 20f;
     public Vector2 mousePos;
     //declaramos a variável mouseposition pra usar posteriormente no codigo, pra receber a posiçao do 
     // mouse, cuja é vector2
@@ -41,7 +41,7 @@ public class ShotMechanic : MonoBehaviour
             Bullet.transform.position = playerTransform.position;
             //a bala retorna pra posição do player, que é o pai do gameobject bullet.
             Bullet.transform.SetParent(playerTransform);
-            //a bala é reparentada pro player, pra ficar presa a ele e se mover junto com ele.
+            //a bala é reparentada pro player, pra ficar presa a ele e se mover junto com ele. 
         }
         else{
         //caso isShot seja true, ou, a bala foi atirada:
@@ -88,6 +88,7 @@ public class ShotMechanic : MonoBehaviour
         //casa a bala colida com algo, com a parede ou com um inimigo,
         ResetShot();
     }
+    
 
     private void ResetShot()
     //criei esse metodo pra resumir essas duas coisas, já que se repetiam varias vezes
