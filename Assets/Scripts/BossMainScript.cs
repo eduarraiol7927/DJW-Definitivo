@@ -19,6 +19,8 @@ public class BossMainScript : MonoBehaviour
     //variavel pra saber se ja houve colisao
     public bool dashPerformed = false;
     //variavel pra saber se o dash ja foi realizado
+    public bool canDash = false;
+    // variavel pra decidir se o boss pode dar o dash
     
     void Start()
     {
@@ -27,14 +29,14 @@ public class BossMainScript : MonoBehaviour
         //pegando o rigidbody e o sprite renderer
     }
 
-
     void FixedUpdate()
     {
         if (collisionPerformed == true && dashPerformed == true)
         {
-            health -= 20;
-            OnDamageEffect();
+            health -= 10;
+            StartCoroutine(OnDamageEffect());
         }
+        if (got)
         
         direction = (player.transform.position - transform.position).normalized;
         // atribuimos ao direction o vetor diferença, q é entre a posição do player e a do boss, fazendo um vetor
@@ -53,13 +55,37 @@ public class BossMainScript : MonoBehaviour
         sr.color = Color.red;
         collisionPerformed = false;
     }
+    
+    IEnumerator TimerForDash()
+    {
+        yield return new WaitForSeconds(18f);
+        canDash = true;
+    }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Parede"))
         {
             collisionPerformed = true;
         }
+        if(collision.gameObject.CompareTag("Bala"));{
+
+        }
     }
-    
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Parede"))
+        {
+            collisionPerformed = false;
+        }
+    }
+
+    void OnDash()
+    {
+        if (canDash == true){
+            rb.AddForce();
+        }
+
+    }
+
 }
