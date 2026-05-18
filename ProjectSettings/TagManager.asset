@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Boss
   - Parede
+  - Bala
   layers:
   - Default
   - TransparentFX
