@@ -68,7 +68,7 @@ public class BossMainScript : MonoBehaviour
     IEnumerator TimerForDash()
     //coroutine de timer pro dash pra dizer pro boss dar dash a cada 18 segundos
     {
-        yield return new WaitForSeconds(18f);
+        yield return new WaitForSeconds(5f);
         canDash = true;
     }
 
@@ -76,13 +76,13 @@ public class BossMainScript : MonoBehaviour
     //coroutine q antecipa o dash, fazendo o boss piscar pra avisar o player
     {
         sr.color = Color.yellow;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         sr.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         sr.color = Color.yellow;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         sr.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
 
     }
@@ -142,7 +142,7 @@ public class BossMainScript : MonoBehaviour
         if (collisionPerformed == true && dashPerformed == true)
         //caso o boss tenha batido na parede e por causa do dash, perde dano.
         {
-            health -= 10;
+            health -= 5;
             StartCoroutine(OnDamageEffect());
         }
     }
