@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float Speed = 10f;
+    public float Speed = 13f;
     //Velocidade do personagem
     private Rigidbody2D rb;
     //Variável que armazena o rigidbody
@@ -11,7 +11,11 @@ public class PlayerController : MonoBehaviour
     //Pra lembrar o input do OnMove e usar no FixedUpdate
     private ShotMechanic shotMechanic;
     //variavel pra referenciar o script shotmechanic e usar ele pro isShot
-
+    public int health = 6;
+    //variavel de vida
+    private BossMainScript boss1;
+    public bool wasDamaged = false;
+    private Vector2 direction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,12 +24,13 @@ public class PlayerController : MonoBehaviour
     //Atribuindo rigidbody pro rb
         shotMechanic = GetComponentInChildren<ShotMechanic>();
     //atribuindo o script shotmechanic pra variavel, pegando ele do objeto bullet.
+        boss1 = GetComponent<BossMainScript>();
 
     }
     // Update is called once per frame
     void Update()
     {
-        
+        OnDamage();
     }
 
     void OnMove(InputValue inputValue)
@@ -71,6 +76,29 @@ public class PlayerController : MonoBehaviour
 
             //Mais detalhadamente, o que acontece no Mathf.MoveTowards é que ele pega a velocidade atual e vai subtraindo a
             // aceleração até chegar ao 0.
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Boss")){
+            wasDamaged = true;
+        }
+    }
+
+    void OnDamage(){
+        direction = (player.transform.position - transform.position).normalized;
+        //é o mesmo direction usado no BossScript pra ele mirar no player, só q vou usar ele negativo pra ser knockback
+
+        if (wasDamaged == true){
+            health-=2;
+            rb.AddForce(-direction * 10f, ForceMode2D.Impulse);
+        }
+    }
+
+    void OnDeath(){
+        if (health >= 0){
+            Destroy(gameObject);
         }
     }
 }

@@ -6,8 +6,8 @@ public class BossMainScript : MonoBehaviour
 {
     public float health = 100f;
     //vida do boss
-    private float speed = 3f;
-    //velocidade do boss
+    private float speed = 7f;
+    //velocidade do boss                                                                                                                
     private Vector2 direction;
     private Vector2 dashDirection;
     private SpriteRenderer sr;
@@ -24,6 +24,8 @@ public class BossMainScript : MonoBehaviour
     // variavel pra decidir se o boss pode dar o dash
     private bool isDashing = false;
     // variavel pra saber se o boss ta dando o dash
+    public int damage = 2;
+    // variavel de dano do boss
 
     void Start()
     {
