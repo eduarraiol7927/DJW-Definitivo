@@ -6,8 +6,8 @@ public class BossMainScript : MonoBehaviour
 {
     public float health = 100f;
     //vida do boss
-    private float speed = 7f;
-    //velocidade do boss                                                                                                                
+    private float speed = 6f;
+    //velocidade do boss
     private Vector2 direction;
     private Vector2 dashDirection;
     private SpriteRenderer sr;
@@ -25,7 +25,7 @@ public class BossMainScript : MonoBehaviour
     private bool isDashing = false;
     // variavel pra saber se o boss ta dando o dash
     public int damage = 2;
-    // variavel de dano do boss
+    private PlayerController playerController;
 
     void Start()
     {
@@ -97,6 +97,7 @@ public class BossMainScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Bala")) ;
         {
             health -= 1f;
+            playerController.wasDamaged = false;
         }
     }
     void OnCollisionExit2D(Collision2D collision)
@@ -142,9 +143,10 @@ public class BossMainScript : MonoBehaviour
     void OnDamage()
     {
         if (collisionPerformed == true && dashPerformed == true)
-        //caso o boss tenha batido na parede e por causa do dash, perde dano.
+        //caso o boss tenha batido na parede e por causa do dash, toma dano.
         {
             health -= 5;
+            
             StartCoroutine(OnDamageEffect());
         }
     }
@@ -175,5 +177,7 @@ public class BossMainScript : MonoBehaviour
         Destroy(gameObject);
         //o boss morre.
     }
+
+    
 
 }

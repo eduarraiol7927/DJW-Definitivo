@@ -1,9 +1,10 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float Speed = 13f;
+    public float Speed = 15f;
     //Velocidade do personagem
     private Rigidbody2D rb;
     //Variável que armazena o rigidbody
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private BossMainScript boss1;
     public bool wasDamaged = false;
     private Vector2 direction;
+    private bool knockbackPerforming = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,13 +26,14 @@ public class PlayerController : MonoBehaviour
     //Atribuindo rigidbody pro rb
         shotMechanic = GetComponentInChildren<ShotMechanic>();
     //atribuindo o script shotmechanic pra variavel, pegando ele do objeto bullet.
-        boss1 = GetComponent<BossMainScript>();
+        boss1 = GameObject.FindGameObjectWithTag("Boss").GetComponent<BossMainScript>();
 
     }
     // Update is called once per frame
     void Update()
     {
         OnDamage();
+        OnDeath();
     }
 
     void OnMove(InputValue inputValue)
@@ -58,7 +61,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     //Usamos o FixedUpdate porque é melhor lidar com a física do jogo com ele.
     {
-        if (input != Vector2.zero)
+        if (input != Vector2.zero && knockbackPerforming == false)
         //Caso o input seja diferente de 0,
         {
             rb.linearVelocity = input * Speed;
@@ -86,18 +89,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnDamage(){
-        direction = (player.transform.position - transform.position).normalized;
-        //é o mesmo direction usado no BossScript pra ele mirar no player, só q vou usar ele negativo pra ser knockback
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Boss")){
+            wasDamaged = false;
 
-        if (wasDamaged == true){
-            health-=2;
-            rb.AddForce(-direction * 10f, ForceMode2D.Impulse);
         }
     }
 
+    void OnDamage(){
+        direction = (transform.position - boss1.transform.position).normalized;
+        //é o mesmo direction usado no BossScript pra ele mirar no player, só q vou usar ele negativo pra ser knockback
+
+        if (wasDamaged == true){
+            Debug.Log("Direction: " + direction);
+            knockbackPerforming = true;
+            health -= boss1.damage;
+            rb.AddForce(-direction * 10f, ForceMode2D.Impulse);
+            wasDamaged = false;
+            StartCoroutine(Knockback());
+        }
+
+
+    }
+
+    IEnumerator Knockback(){
+        yield return new WaitForSeconds(0.2f);
+        knockbackPerforming = false;
+    }
+        
+
     void OnDeath(){
-        if (health >= 0){
+        if (health <= 0){
             Destroy(gameObject);
         }
     }
