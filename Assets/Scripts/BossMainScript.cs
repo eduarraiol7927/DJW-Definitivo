@@ -6,7 +6,7 @@ public class BossMainScript : MonoBehaviour
 {
     public float health = 100f;
     //vida do boss
-    private float speed = 6f;
+    public float speed = 6f;
     //velocidade do boss
     private Vector2 direction;
     private Vector2 dashDirection;
@@ -26,6 +26,7 @@ public class BossMainScript : MonoBehaviour
     // variavel pra saber se o boss ta dando o dash
     public int damage = 2;
     private PlayerController playerController;
+    private bool damagedPlayer = false;
 
     void Start()
     {
@@ -39,7 +40,8 @@ public class BossMainScript : MonoBehaviour
     void FixedUpdate()
     {
         
-        if (isDashing == false)
+        if (isDashing == false && damagedPlayer == false)
+        //coloquei essa condição pro linearVelocity nao sobrepor o AddForce, senao ele n funciona 
         {
             direction = (player.transform.position - transform.position).normalized;
             // atribuimos ao direction o vetor diferença, q é entre a posição do player e a do boss, fazendo um vetor
@@ -53,18 +55,19 @@ public class BossMainScript : MonoBehaviour
         OnDeath();
     }
 
+
     IEnumerator OnDamageEffect()
     //coroutine pra dar o efeito de dano
     {
         collisionPerformed = false;
         dashPerformed = false;
         rb.AddForce(-direction * 10f, ForceMode2D.Impulse);
+        //knockback do boss, com o direction negativo pra ele justamente voltar        
         sr.color = Color.red;
         yield return new WaitForSeconds(0.2f);
         sr.color = Color.white;
         yield return new WaitForSeconds(0.2f);
         sr.color = Color.red;
-        // resetamos a variavel de colisao pra evitar q o dano fique repetindo
     }   
     
     IEnumerator TimerForDash()
@@ -94,10 +97,21 @@ public class BossMainScript : MonoBehaviour
         {
             collisionPerformed = true;
         }
-        if (collision.gameObject.CompareTag("Bala")) ;
+
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            damagedPlayer = true;
+        }
+
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    //vou usar o trigger pra detectar a bala, pq se eu colocar junto com o OnCollisionEnter2D, o boss n vai detectar a bala, pq a bala tem um collider trigger, entao o OnCollisionEnter2D
+    // ele fica pensando q a bala n existe, mesmo separando por tag, alem disso ativo o IsTrigger do bc da bala.
+    {
+        if (collider.CompareTag("Bala"))
         {
             health -= 1f;
-            playerController.wasDamaged = false;
         }
     }
     void OnCollisionExit2D(Collision2D collision)
@@ -105,6 +119,7 @@ public class BossMainScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Parede"))
         {
             collisionPerformed = false;
+            // resetamos a variavel de colisao pra evitar q o dano fique repetindo
         }
     }
 
@@ -149,6 +164,21 @@ public class BossMainScript : MonoBehaviour
             
             StartCoroutine(OnDamageEffect());
         }
+
+        if (damagedPlayer == true)
+        {
+            rb.AddForce(-direction * 1f, ForceMode2D.Impulse);
+            //coloco um knockback aq quando ele bater no player, pra dar tempo de escapar
+            StartCoroutine(DamagedPlayerReturn());
+        }
+    }
+
+    IEnumerator DamagedPlayerReturn()
+    //coroutine pra resetar a variavel damagedPlayer, dando tempo pós dano. tive q colocar uma coroutine
+    //porque nao da pra só colocar o damagedPlayer = false, seria o equivalente a piscar a variavel.
+    {
+        yield return new WaitForSeconds(0.5f);
+        damagedPlayer = false;
     }
 
     void OnDeath()
@@ -163,13 +193,13 @@ public class BossMainScript : MonoBehaviour
     {
         transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         sr.color = Color.white;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         transform.localScale = new Vector3(1f, 1f, 1f);
         sr.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         sr.color = Color.white;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         transform.localScale = new Vector3(1f, 1f, 1f);
         sr.color = Color.red;
         //o boss aumenta e diminui antes de morrer

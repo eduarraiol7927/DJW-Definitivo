@@ -81,7 +81,7 @@ public class ShotMechanic : MonoBehaviour
         ResetShot();
     } 
 
-    void OnCollisionEnter2D()
+    void OnTriggerEnter2D(Collider2D collider)
     //isso é mt importante, porque só o box collider sozinho fica bugando a bala, fazendo ela ficar presa
     // tentando passar a parede, e o player fica indo pra tras.
     {

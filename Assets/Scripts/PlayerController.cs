@@ -18,12 +18,15 @@ public class PlayerController : MonoBehaviour
     public bool wasDamaged = false;
     private Vector2 direction;
     private bool knockbackPerforming = false;
+    private SpriteRenderer sr;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     //Atribuindo rigidbody pro rb
+        sr = GetComponent<SpriteRenderer>();
+        //atribuindo o sprite renderer pra sr 
         shotMechanic = GetComponentInChildren<ShotMechanic>();
     //atribuindo o script shotmechanic pra variavel, pegando ele do objeto bullet.
         boss1 = GameObject.FindGameObjectWithTag("Boss").GetComponent<BossMainScript>();
@@ -91,7 +94,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Boss")){
+        if (collision.gameObject.CompareTag("Boss") && gameObject.tag == "Player"){
             wasDamaged = false;
 
         }
@@ -102,26 +105,41 @@ public class PlayerController : MonoBehaviour
         //é o mesmo direction usado no BossScript pra ele mirar no player, só q vou usar ele negativo pra ser knockback
 
         if (wasDamaged == true){
-            Debug.Log("Direction: " + direction);
             knockbackPerforming = true;
             health -= boss1.damage;
-            rb.AddForce(-direction * 10f, ForceMode2D.Impulse);
+            rb.AddForce(direction * 30f, ForceMode2D.Impulse);
             wasDamaged = false;
-            StartCoroutine(Knockback());
+            knockbackPerforming = false;
         }
-
-
     }
 
-    IEnumerator Knockback(){
-        yield return new WaitForSeconds(0.2f);
-        knockbackPerforming = false;
-    }
-        
+    IEnumerator DeathEffect()
+    {
+        transform.localScale = new Vector2(1f, 1f);
+        sr.color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = new Vector2(1.5f, 1.5f);
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = new Vector2(1f, 1f);
+        sr.color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = new Vector2(1.5f, 1.5f);
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = new Vector2(1f, 1f);
+        sr.color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = new Vector2(1.5f, 1.5f);
+        sr.color = Color.red;
+
+        Destroy(gameObject);
+    }    
 
     void OnDeath(){
         if (health <= 0){
-            Destroy(gameObject);
+            boss1.speed = 0f;
+            StartCoroutine(DeathEffect());
         }
     }
 }
