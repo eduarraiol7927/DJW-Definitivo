@@ -55,6 +55,75 @@ public class BossMainScript : MonoBehaviour
         OnDeath();
     }
 
+    void OnDash()
+    {
+        if (canDash == true){
+        //deu os 18 segundos, o boss pode dar dash                    
+            canDash = false;
+            //resetamos a variavel pra ele n ficar dando dash infinitamente
+            StartCoroutine(DashSequence());
+            //iniciamos a coroutine do dash, eu decidi botar numa coroutine pra poder usar
+            // o yield return pra esperar o dashWarningEffect terminar antes de partir pro dash
+        }
+    }
+
+    void OnDamage()
+    {
+        if (collisionPerformed == true && dashPerformed == true)
+        //caso o boss tenha batido na parede e por causa do dash, toma dano.
+        {
+            health -= 5;
+            
+            StartCoroutine(OnDamageEffect());
+        }
+
+        if (damagedPlayer == true)
+        {
+            rb.AddForce(-direction * 0.3f, ForceMode2D.Impulse);
+            //coloco um knockback aq quando ele bater no player, pra dar tempo de escapar
+            StartCoroutine(DamagedPlayerReturn());
+        }
+    }
+
+    void OnDeath()
+    {
+        if (health <= 0)
+        {
+            StartCoroutine(DeathEffect());
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    //Queremos que o boss colida com isso fisicamente, ou seja, seja barrado nisso.
+    {
+        if (collision.gameObject.CompareTag("Parede"))
+        {
+            collisionPerformed = true;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    //vou usar o trigger pra detectar a bala, pq se eu colocar junto com o OnCollisionEnter2D, o boss n vai detectar a bala, pq a bala tem um collider trigger, entao o OnCollisionEnter2D
+    // ele fica pensando q a bala n existe, mesmo separando por tag, alem disso ativo o IsTrigger do bc da bala.
+    {
+        if (collider.CompareTag("Bala"))
+        {
+            health -= 1f;
+        }
+
+            if (collider.gameObject.CompareTag("Player"))
+        {
+            damagedPlayer = true;
+        }
+    }
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Parede"))
+        {
+            collisionPerformed = false;
+            // resetamos a variavel de colisao pra evitar q o dano fique repetindo
+        }
+    }
 
     IEnumerator OnDamageEffect()
     //coroutine pra dar o efeito de dano
@@ -88,51 +157,6 @@ public class BossMainScript : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         sr.color = Color.red;
         yield return new WaitForSeconds(0.1f);
-
-
-    }
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Parede"))
-        {
-            collisionPerformed = true;
-        }
-
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            damagedPlayer = true;
-        }
-
-    }
-
-    void OnTriggerEnter2D(Collider2D collider)
-    //vou usar o trigger pra detectar a bala, pq se eu colocar junto com o OnCollisionEnter2D, o boss n vai detectar a bala, pq a bala tem um collider trigger, entao o OnCollisionEnter2D
-    // ele fica pensando q a bala n existe, mesmo separando por tag, alem disso ativo o IsTrigger do bc da bala.
-    {
-        if (collider.CompareTag("Bala"))
-        {
-            health -= 1f;
-        }
-    }
-    void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Parede"))
-        {
-            collisionPerformed = false;
-            // resetamos a variavel de colisao pra evitar q o dano fique repetindo
-        }
-    }
-
-    void OnDash()
-    {
-        if (canDash == true){
-        //deu os 18 segundos, o boss pode dar dash                    
-            canDash = false;
-            //resetamos a variavel pra ele n ficar dando dash infinitamente
-            StartCoroutine(DashSequence());
-            //iniciamos a coroutine do dash, eu decidi botar numa coroutine pra poder usar
-            // o yield return pra esperar o dashWarningEffect terminar antes de partir pro dash
-        }
     }
 
     IEnumerator DashSequence()
@@ -155,23 +179,6 @@ public class BossMainScript : MonoBehaviour
         //iniciamos o timer pro dash, pra acontecer isso tudo de novo.
     }
 
-    void OnDamage()
-    {
-        if (collisionPerformed == true && dashPerformed == true)
-        //caso o boss tenha batido na parede e por causa do dash, toma dano.
-        {
-            health -= 5;
-            
-            StartCoroutine(OnDamageEffect());
-        }
-
-        if (damagedPlayer == true)
-        {
-            rb.AddForce(-direction * 1f, ForceMode2D.Impulse);
-            //coloco um knockback aq quando ele bater no player, pra dar tempo de escapar
-            StartCoroutine(DamagedPlayerReturn());
-        }
-    }
 
     IEnumerator DamagedPlayerReturn()
     //coroutine pra resetar a variavel damagedPlayer, dando tempo pós dano. tive q colocar uma coroutine
@@ -181,13 +188,6 @@ public class BossMainScript : MonoBehaviour
         damagedPlayer = false;
     }
 
-    void OnDeath()
-    {
-        if (health <= 0)
-        {
-            StartCoroutine(DeathEffect());
-        }
-    }
 
     IEnumerator DeathEffect()
     {
