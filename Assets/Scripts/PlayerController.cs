@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
         shotMechanic = GetComponentInChildren<ShotMechanic>();
     //atribuindo o script shotmechanic pra variavel, pegando ele do objeto bullet.
         boss1 = GameObject.FindGameObjectWithTag("Boss").GetComponent<BossMainScript>();
-
     }
     // Update is called once per frame
     void Update()
@@ -40,8 +39,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnMove(InputValue inputValue)
-    //Usa o void porque ele não retorna nada. OnMove pra definir pra que serve. Os Parenteses são pra receber o input que o jogador
-    // usar.
+    //Os Parenteses são pra receber o input que o jogador usar.
     {
         input = inputValue.Get<Vector2>();
         //O input recebe a varíavel inputValue (ex: W, A, S, D), e usamos o .Get<Vector2>() pra ser compreendido como um valor de x
@@ -82,6 +80,7 @@ public class PlayerController : MonoBehaviour
 
             //Mais detalhadamente, o que acontece no Mathf.MoveTowards é que ele pega a velocidade atual e vai subtraindo a
             // aceleração até chegar ao 0.
+
         }
     }
 
