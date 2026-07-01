@@ -6,6 +6,8 @@ public class AnimationController : MonoBehaviour
     //para utilizar o animator e o animation
     private Rigidbody2D rb;
     //para verificar se esta parado ou se movendo
+    private Vector2 direction;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -14,8 +16,10 @@ public class AnimationController : MonoBehaviour
 
     void Update()
     {
-        if (rb.linearVelocity != Vector2.zero)
-        //se estiver se movendo
+        direction = rb.linearVelocity.normalized;
+
+        if (rb.linearVelocity == Vector2.up || direction == Vector2.down)
+        //se estiver se movendo pra cima ou pra baixo
         {
             animator.SetBool("IsWalking", true);
         }
@@ -24,6 +28,15 @@ public class AnimationController : MonoBehaviour
         {
             animator.SetBool("IsWalking", false);
             animator.SetBool("Idle", true);
+        }
+
+        if (direction == Vector2.right){
+            animator.SetBool("IsWalkingRight", true);
+            animator.SetBool("IsWalkingLeft", false);
+        }
+        if (direction == Vector2.left){
+            animator.SetBool("IsWalkingLeft", true);
+            animator.SetBool("IsWalkingRight", false);
         }
     }
 }
