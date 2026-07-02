@@ -27,14 +27,18 @@ public class AnimationController : MonoBehaviour
         //se estiver parado
         {
             animator.SetBool("IsWalking", false);
+            animator.SetBool("IsWalkingRight", false);
+            animator.SetBool("IsWalkingLeft", false);
             animator.SetBool("Idle", true);
         }
 
         if (direction == Vector2.right){
+            //se estiver se movendo pra direita
             animator.SetBool("IsWalkingRight", true);
             animator.SetBool("IsWalkingLeft", false);
         }
         if (direction == Vector2.left){
+            //se estiver se movendo pra esquerda
             animator.SetBool("IsWalkingLeft", true);
             animator.SetBool("IsWalkingRight", false);
         }
